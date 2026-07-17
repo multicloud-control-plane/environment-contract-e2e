@@ -1,0 +1,24 @@
+name: Environment contract E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        required: true
+        type: choice
+        options: [plan, apply]
+      security_profile:
+        required: true
+        type: choice
+        options: [github-environments, repository-secrets]
+
+permissions:
+  contents: read
+
+jobs:
+  call:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      mode: ${{ inputs.mode }}
+      security_profile: ${{ inputs.security_profile }}
+      environment_name: dev

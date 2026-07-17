@@ -1,0 +1,36 @@
+name: Reusable environment contract
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        required: true
+        type: string
+      security_profile:
+        required: true
+        type: string
+      environment_name:
+        required: true
+        type: string
+
+jobs:
+  environment-profile:
+    if: inputs.security_profile == 'github-environments'
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.mode == 'apply' && format('{0}-apply', inputs.environment_name) || inputs.environment_name }}
+      deployment: ${{ inputs.mode == 'apply' }}
+    steps:
+      - name: Verify undeclared Environment secret delivery
+        env:
+          E2E_VALUE: ${{ secrets.E2E_VALUE }}
+        run: test "$E2E_VALUE" = environment-delivery-ok
+
+  repository-profile:
+    if: inputs.security_profile == 'repository-secrets'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify no Environment secret is attached
+        env:
+          E2E_VALUE: ${{ secrets.E2E_VALUE }}
+        run: test -z "$E2E_VALUE"
