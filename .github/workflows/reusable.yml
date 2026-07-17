@@ -12,6 +12,9 @@ on:
       environment_name:
         required: true
         type: string
+    secrets:
+      E2E_VALUE:
+        required: false
 
 jobs:
   environment-profile:
