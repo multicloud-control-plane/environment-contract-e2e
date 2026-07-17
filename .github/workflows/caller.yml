@@ -23,4 +23,4 @@ jobs:
       security_profile: ${{ inputs.security_profile }}
       environment_name: dev
     secrets:
-      E2E_VALUE: ${{ secrets.GITHUB_TOKEN }}
+      E2E_VALUE: ${{ 'caller-sentinel-must-be-overridden' }}
